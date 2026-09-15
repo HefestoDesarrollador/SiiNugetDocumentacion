@@ -1,0 +1,321 @@
+/* =========================================================
+   HEFESTO - ESTILOS GENERALES
+   ========================================================= */
+
+/* ---------- Variables globales ---------- */
+
+:root {
+    --color-primary: #4a5568;
+    --color-primary-dark: #2d3748;
+    --color-secondary: #718096;
+
+    --color-background: #bebebe; 
+    --color-surface: #ced3d8;
+
+    --color-text: #2d3748;
+    --color-text-light: #718096;
+
+    --color-border: #e2e8f0;
+
+    --font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    --max-width: 1200px;
+
+    --spacing-small: 0.5rem;
+    --spacing-medium: 1rem;
+    --spacing-large: 2rem;
+
+    --border-radius: 8px;
+}
+
+
+/* ---------- Reset básico ---------- */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* ---------- HTML / Body ---------- */
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--color-background);
+    color: var(--color-text);
+    line-height: 1.6;
+
+    background-image: url("../images/textura.jfif"); 
+    background-repeat: repeat;
+
+
+
+
+}
+
+
+/* ---------- Enlaces ---------- */
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--color-primary-dark);
+}
+
+
+/* ---------- Encabezado ---------- */
+
+header {
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+nav {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: var(--spacing-medium);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary-dark);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+}
+
+.logo-hefesto {
+    width: 60px;
+    height: 60px;
+    margin-right: 10px;
+}
+
+
+
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: var(--spacing-large);
+}
+
+
+/* ---------- Contenido ---------- */
+
+main {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 3rem var(--spacing-medium);
+}
+
+section {
+    margin-bottom: 2rem;
+}
+
+h1,
+h2,
+h3 {
+    color: var(--color-primary-dark);
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: 2.0rem;
+    margin-bottom: var(--spacing-medium);
+}
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-medium);
+}
+
+h3 {
+    font-size: 1.25rem;
+    margin-bottom: var(--spacing-small);
+}
+
+p {
+    margin-bottom: var(--spacing-medium);
+}
+
+
+/* ---------- Bloques de código ---------- */
+
+pre {
+    background-color: #1e293b;
+    color: #e2e8f0;
+
+    padding: var(--spacing-medium);
+    border-radius: var(--border-radius);
+
+    overflow-x: auto;
+    margin: var(--spacing-medium) 0;
+}
+
+code {
+    font-family:
+        Consolas,
+        "Courier New",
+        monospace;
+    font-size: 12px;    
+}
+
+
+/* ---------- Artículos ---------- */
+
+article {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+
+    padding: var(--spacing-large);
+    margin-bottom: var(--spacing-medium);
+}
+
+
+/* ---------- Footer ---------- */
+
+footer {
+    background-color: var(--color-primary-dark);
+    color: white;
+
+    text-align: center;
+
+    padding: var(--spacing-large);
+}
+
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 768px) {
+
+    nav {
+        flex-direction: column;
+        gap: var(--spacing-medium);
+    }
+
+    nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--spacing-medium);
+    }
+
+    main {
+        padding: 2rem var(--spacing-medium);
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+
+ 
+
+
+
+}
+
+/* ---------- Tabla de herramientas ---------- */
+
+    .table-container {
+        width: 100%;
+        overflow-x: auto;
+        margin-top: var(--spacing-large);
+    }
+
+    .tools-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--border-radius);
+        overflow: hidden;
+    }
+
+    .tools-table th {
+        background-color: #d1d5db;
+        color: #374151;
+
+        text-align: left;
+        font-weight: 600;
+
+        padding: 5px 20px 5px 15px;
+        border-bottom: 0px solid #9ca3af;
+    }
+
+    .tools-table td {
+        padding: 5px 20px 5px 15px;
+
+        border-bottom: 1px solid #e5e7eb;
+
+        color: var(--color-text);
+        vertical-align: top;
+    }
+
+    /* Filas alternadas */
+
+    .tools-table tbody tr:nth-child(even) {
+        background-color: #f3f4f6;
+    }
+
+    .tools-table tbody tr:nth-child(odd) {
+        background-color: #fafafa;
+    }
+
+    /* Efecto al pasar el mouse */
+
+    .tools-table tbody tr:hover {
+        background-color: #e5e7eb;
+        cursor: pointer;
+    }
+
+    /* Nombre del producto */
+
+    .tools-table td:first-child {
+        width: 30%;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .tools-table td:first-child a {
+        color: #374151;
+    }
+
+    .tools-table td:first-child a:hover {
+        color: #111827;
+        text-decoration: underline;
+    }
+
+    /* Última fila */
+
+    .tools-table tbody tr:last-child td {
+        border-bottom: none;
+    }
