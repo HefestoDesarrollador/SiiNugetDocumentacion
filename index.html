@@ -1,16 +1,144 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi primer sitio</title>
+
+    <meta name="description" content="Documentación de la biblioteca Hefesto">
+
+    <title>Hefesto | Documentación</title>
+
+    <link rel="stylesheet" href="css/site.css">
 </head>
 
 <body>
 
-    <h1>¡Hola, Cooper genial!</h1>
+    <!-- Encabezado -->
+    <header>
+        <nav>
 
-    <p>Este es mi primer sitio web publicado con GitHub.</p>
+            <div class="brand">
+
+            <a href="index.html">
+            <img
+            src="Images/icon.png"
+            alt="Logo Hefesto"
+            class="logo-hefesto" style="width: 60px; height: 60px; margin-right: 10px;"></a>
+
+            <div class="logo">
+                Hefesto Investigación y Desarrollo.
+            </div>
+
+            </div>
+
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#instalacion">Instalación</a></li>
+                <li><a href="#uso">Uso</a></li>
+                <li><a href="#api">API</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Contenido principal -->
+    <main>
+
+        <!-- Inicio -->
+        <section id="inicio">
+            <h1>Hefesto</h1>
+
+            <p>
+               Hefesto es un conjunto de herramientas y soluciones de software orientadas a facilitar y automatizar procesos relacionados con el Servicio de Impuestos Internos (SII) y la facturación electrónica en Chile.
+
+               Nuestro objetivo es simplificar procesos técnicos complejos, proporcionando componentes y herramientas que permitan a los desarrolladores integrar, generar, validar y procesar información tributaria de manera eficiente.
+
+               Hefesto está compuesto por diferentes paquetes NuGet, cada uno diseñado para resolver una necesidad específica dentro del ecosistema tributario y de facturación electrónica.
+
+                Desde esta documentación podrás conocer las diferentes herramientas disponibles y seleccionar el paquete que mejor se adapte a las necesidades de tu desarrollo.
+
+                La tabla de herramientas ubicada a continuación presenta los diferentes paquetes disponibles, junto con una descripción de su propósito y funcionalidad.
+
+            </p>
+
+        </section>
+        
+        <!--
+        <section id="inicio">
+            <h1>Prueba gratuita</h1>
+
+            <p>
+            Todos los componentes de Hefesto cuentan con un período de 30 días de uso gratuito, permitiéndote evaluar sus funcionalidades e integrarlos en tus proyectos antes de adquirir una licencia.
+
+            Una vez finalizado el período de prueba, será necesario disponer de una licencia válida para continuar utilizando las herramientas.
+
+            </p>
+                
+
+        </section>
+        -->
+
+        <section id="herramientas">
+
+            <h2>Herramientas Csharp disponibles. (C#)</h2>
+
+            <p>
+                Selecciona una de las herramientas disponibles para conocer
+                sus funcionalidades, instalación y ejemplos de uso.
+            </p>
+
+            <div class="table-container">
+
+                <table class="tools-table">
+
+                    <thead>
+                        <tr>
+                            <th>Nombre producto</th>
+                            <th>Plat.</th>
+                            <th>Breve descripción</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td style="vertical-align: middle;">
+                                <a href="lce/HefLce.html">
+                                    Hefesto.Lce (Beta)
+                                </a>
+                            </td>
+                            <td style="vertical-align: middle;">
+                                .NET 8.0
+                            <td>
+                                Componentes para la generación, estructuración y preparación de Libros Contables Electrónicos (LCE) destinados a los procesos del Servicio de Impuestos Internos de Chile (SII).
+                            </td>
+                        </tr>
+
+                        
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        
+
+    </main>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>
+            © 2026 Hefesto
+        </p>
+    </footer>
+
+    <script src="js/site.js"></script>
 
 </body>
+
 </html>
