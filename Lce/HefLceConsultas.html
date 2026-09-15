@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Ejemplo de la biblioteca Hefesto LCE">
+
+    <title>Hefesto | Documentación</title>
+
+    <link rel="stylesheet" href="../css/site.css">
+
+
+<link rel="stylesheet"
+      href="https:///cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+
+<script src="https:///cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+<script src="https:///cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/csharp.min.js"></script>
+
+<script src="https:///cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/xml.min.js"></script>
+
+
+
+
+</head>
+
+<body>
+
+    <!-- Encabezado -->
+    <header>
+        <nav>
+           <div class="brand">
+
+            <a href="../index.html">
+            <img
+            src="../Images/icon.png"
+            alt="Logo Hefesto"
+            class="logo-hefesto" style="width: 60px; height: 60px; margin-right: 10px;"></a>
+
+            <div class="logo">
+                Hefesto Investigación y Desarrollo.
+            </div>
+
+            </div>
+
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#instalacion">Instalación</a></li>
+                <li><a href="#uso">Uso</a></li>
+                <li><a href="#api">API</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Contenido principal -->
+    <main>
+
+        <!-- Inicio -->
+        <section id="inicio">
+            <h1>Hefesto LCE (Consultas libros)</h1>
+
+            <p>
+Proceso encargado de enviar un Libro Contable Electrónico (LCE) al Servicio de Impuestos Internos (SII). Hefesto utiliza el archivo XML generado, configura el ambiente de publicación y los datos de autenticación, y realiza el envío directamente al SII.
+
+Una vez procesada la solicitud, el sistema informa el resultado de la operación y, cuando la publicación es exitosa, obtiene el **Track ID** entregado por el SII, permitiendo identificar y realizar el seguimiento del envío.
+
+            </p>
+        </section>
+<br/>
+<h2>Ejemplo de consulta estado unificado de libros en el SII.</h2>
+<pre>
+<code class="language-csharp">
+
+/// &lt;summary&gt;
+/// Bibliotecas necsarias.
+/// &lt;/summary&gt;
+using Hefesto.SII.Lce.Enumeradores;
+using Hefesto.SII.Lce.Extruturas.Balance;
+using Hefesto.SII.Lce.Extruturas.Diario;
+using Hefesto.SII.Lce.Extruturas.Diccionario;
+using Hefesto.SII.Lce.Extruturas.Mayor;
+using Hefesto.SII.Lce.Instancias;
+using System.Text;
+using System.Xml.Linq;            
+
+internal class Program
+{
+
+    ///
+    /// Punto de entrada del programa.
+    static async Task Main(string[] args)
+    {
+        ///
+        /// Publicación de libros en el SII.
+        await PublicarEnvioLibroSII();
+
+        ///
+        /// Mantener la consola abierta.
+        Console.readLine();
+
+    }
+
+    ///
+    /// Consultas al SII por el estado de los libros enviados.
+    public static async Task ConsultarEstadoEnvioLibroSII()
+    {
+
+        ///
+        /// Regresa el estado de todos los envíos al SII.
+
+        ///
+        /// Cree el publicador 
+        var consultas = HefestoLceElements.CrearSiiLceConsultas()
+
+            .SiiConfiguracion(cfg => {
+
+                ///
+                /// Datos para la autenticación con el sii.
+                cfg.SiiAutenticacion(auth =>
+                {
+                    auth.Ambiente = SiiAmbiente.PRODUCCION;
+                    auth.Basse64 = "MIIPNgIBAzCCDvIGCSqGSIb3DQEHAaCCDuMEgg7fMIIO2zCCB";
+                    auth.Password = "1234";
+                });
+
+            });
+
+        ///
+        /// Consultar el estado del envío utilizando el trackid.
+        var respConsulta =
+            await
+                consultas.
+                    RutEmpresa("99999999-9").
+                        Periodo(2024).
+                            SIIConsultarEstadoEnvioLibro();
+                    
+
+        ///
+        /// Display.
+        Console.WriteLine($"EsCorrceto : {respConsulta.Success}");
+        Console.WriteLine($"Mensaje    : {respConsulta.Message}");
+        if (respConsulta.Success)
+        {
+
+            File.WriteAllText(
+                "Consultas\\ConsultaEstadosLibros_Produccion.json", 
+                respConsulta.Data, 
+                Encoding.GetEncoding("ISO-8859-1"));
+        }
+
+    }
+    
+}    
+</code>
+</pre>
+
+<br/>
+<h2>Ejemplo respuesta consulta.</h2>
+<pre>
+	<code class="language-json">
+{
+  "hefesto": {
+    "resultado": {
+      "proceso": "Consultas estado LCE.",
+      "ambiente": "PRODUCCION",
+      "periodo": "2024",
+      "rutEmpresa": "99999999-9",
+      "registros": 26,
+      "mensaje": "",
+      "fchConsulta": "2026-09-14T09:48:45",
+      "libros": [
+        {
+          "periodo": "202412",
+          "operacion": "BALANCE",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921806498",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:14:18"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-01 2024-01",
+          "operacion": "DIARIO",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921785706",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:01:45"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-02 2024-02",
+          "operacion": "DIARIO",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921786004",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:01:56"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-03 2024-03",
+          "operacion": "DIARIO",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921786170",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:02:02"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-04 2024-04",
+          "operacion": "DIARIO",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921786324",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:02:09"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-05 2024-05",
+          "operacion": "DIARIO",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921786562",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:02:17"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-06 2024-06",
+          "operacion": "DIARIO",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921786766",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:02:24"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-07 2024-07",
+          "operacion": "DIARIO",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921786904",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:02:31"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-08 2024-08",
+          "operacion": "DIARIO",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921787094",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:02:39"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-09 2024-09",
+          "operacion": "DIARIO",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921787298",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:02:46"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-10 2024-10",
+          "operacion": "DIARIO",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921787458",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:02:54"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-11 2024-11",
+          "operacion": "DIARIO",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921787590",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:03:00"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-12 2024-12",
+          "operacion": "DIARIO",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921787738",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:03:07"
+            }
+          ]
+        },
+        {
+          "periodo": "2024",
+          "operacion": "DICCIONARIO",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921806798",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:14:28"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-01 2024-01",
+          "operacion": "MAYOR",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921803722",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:12:39"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-02 2024-02",
+          "operacion": "MAYOR",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921803870",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:12:46"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-03 2024-03",
+          "operacion": "MAYOR",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921804014",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:12:53"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-04 2024-04",
+          "operacion": "MAYOR",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 0,
+          "mensaje": "No hay registros disponibles para el libro actual en el SII.",
+          "detalle": []
+        },
+        {
+          "periodo": "2024-05 2024-05",
+          "operacion": "MAYOR",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921804400",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:13:11"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-06 2024-06",
+          "operacion": "MAYOR",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921804580",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:13:18"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-07 2024-07",
+          "operacion": "MAYOR",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921804780",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:13:24"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-08 2024-08",
+          "operacion": "MAYOR",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921805010",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:13:30"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-09 2024-09",
+          "operacion": "MAYOR",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921805222",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:13:37"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-10 2024-10",
+          "operacion": "MAYOR",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921805460",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:13:44"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-11 2024-11",
+          "operacion": "MAYOR",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921805640",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:13:52"
+            }
+          ]
+        },
+        {
+          "periodo": "2024-12 2024-12",
+          "operacion": "MAYOR",
+          "estado": "Recibido",
+          "tipoLibro": "LCE",
+          "periodicidad": "ANUAL",
+          "cantidadEnvios": 1,
+          "nroDetalles": 1,
+          "mensaje": "",
+          "detalle": [
+            {
+              "recuperado": true,
+              "mensaje": null,
+              "envio": "10921805892",
+              "tipoEnvio": "TOTAL",
+              "estado": "Envio OK",
+              "fechaRecepcion": "25-06-2025 21:13:59"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+</code>
+</pre>  
+
+
+        
+    </main>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>
+            © 2026 Hefesto
+        </p>
+    </footer>
+
+    <script src="js/site.js"></script>
+
+
+<script>
+    hljs.configure({ languages: ['csharp'] }); hljs.highlightAll();
+</script>
+
+
+
+</body>
+
+</html>

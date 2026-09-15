@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Ejemplo de la biblioteca Hefesto LCE">
+
+    <title>Hefesto | Documentación</title>
+
+    <link rel="stylesheet" href="../css/site.css">
+
+
+<link rel="stylesheet"
+      href="https:///cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+
+<script src="https:///cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+<script src="https:///cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/csharp.min.js"></script>
+
+<script src="https:///cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/xml.min.js"></script>
+
+
+
+
+</head>
+
+<body>
+
+    <!-- Encabezado -->
+    <header>
+        <nav>
+           <div class="brand">
+
+            <a href="../index.html">
+            <img
+            src="../Images/icon.png"
+            alt="Logo Hefesto"
+            class="logo-hefesto" style="width: 60px; height: 60px; margin-right: 10px;"></a>
+
+            <div class="logo">
+                Hefesto Investigación y Desarrollo.
+            </div>
+
+            </div>
+
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#instalacion">Instalación</a></li>
+                <li><a href="#uso">Uso</a></li>
+                <li><a href="#api">API</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Contenido principal -->
+    <main>
+
+        <!-- Inicio -->
+        <section id="inicio">
+            <h1>Hefesto LCE (Libro Diccionario Obligatorio)</h1>
+
+            <p>
+El Diccionario de Cuentas es el Libro Contable Electrónico utilizado para establecer la correspondencia entre las cuentas contables del contribuyente y las cuentas definidas en el Plan de Cuentas del SII. Esta homologación permite representar la estructura contable de la empresa bajo la clasificación requerida por el Servicio, sin modificar el plan de cuentas utilizado internamente.
+<br/>
+En Hefesto SII LCE, el Diccionario se construye mediante estructuras que facilitan su generación y posterior incorporación al Envío Obligatorio, junto con el Balance y los demás comprobantes requeridos.
+            </p>
+        </section>
+<br/>
+<h2>Ejemplo de generación libro diccionario obligatorio.</h2>
+<pre>
+<code class="language-csharp">
+
+/// &lt;summary&gt;
+/// Bibliotecas necsarias.
+/// &lt;/summary&gt;
+using Hefesto.SII.Lce.Enumeradores;
+using Hefesto.SII.Lce.Extruturas.Balance;
+using Hefesto.SII.Lce.Extruturas.Diario;
+using Hefesto.SII.Lce.Extruturas.Diccionario;
+using Hefesto.SII.Lce.Extruturas.Mayor;
+using Hefesto.SII.Lce.Instancias;
+using System.Text;
+using System.Xml.Linq;            
+
+internal class Program
+{
+
+    ///
+    /// Punto de entrada del programa.
+    static async Task Main(string[] args)
+    {
+        ///
+        /// Generar el libro diccionario obligatorio.
+        GenerarEnviolibroDiccionarioOblitatorio();
+    }
+
+	/// &lt;summary&gt;
+	/// Crear el envio de libro diccionario obligatorio.
+	/// &lt;/summary&gt;
+	public static void GenerarEnviolibroDiccionarioOblitatorio()
+	{
+		///
+		/// crear el libro SiiLceEnvioLibros
+		var bookdiccionarioOblig = HefestoLceElements.CrearSiiLceEnvioOblig()
+
+			///
+			/// Configuracion del libro
+			.SiiConfiguracion(cfg =>
+			{
+
+				///
+				/// Datos para la firma del documento.
+				cfg.SiiAutenticacion(auth =>
+				{
+					auth.Basse64 = "MIIPNgIBAzCCDvIGCSqGSIb3DQEHAaCCDuMEgg7fMIIO2zCCBgwGCSq==";
+					auth.Password = "1234";
+				});
+
+				///
+				/// Datos del certificado del SII.
+				cfg.SIILceCoCertificado(auth =>
+				{
+					auth.Load = "CAL_99999999-9_C_2_1.xml";
+				});
+
+			})
+
+
+			///
+			/// Documento envio obligatorio.
+			.SiiDocumentoEnvioOblig(doc =>
+			{
+
+				doc.SiiCaratula(car =>
+				{
+					car.RutEnvia = "88888888-8";
+					car.RutContribuyente = "99999999-9";
+				});
+
+				doc.SIILceCoCierre(cierre =>
+				{
+					///
+					/// agregar libro diario res.
+					cierre.SIIDiccionario( GenerarEnvioLibroDiccionario() );
+
+				});
+
+			});
+
+		///
+		/// Despliega en consola el resultado de la exportación del libro.
+		var respExporta = bookdiccionarioOblig.ExportarLibro();
+		Console.WriteLine($"EsCorrceto : {respExporta.Success}");
+		Console.WriteLine($"Mensaje    : {respExporta.Message}");
+
+		///
+		/// Si es correcto, guarde el libro en un archivo XML.
+		if (respExporta.Success)
+			File.WriteAllText(
+				"EnviosObligatorios\\EnvioLibroDiccionarioObligatorio.xml",
+					respExporta.Data,
+						Encoding.GetEncoding("ISO-8859-1"));
+
+		///
+		/// Crear el libro diccionario.
+		HefLceDiccionario GenerarEnvioLibroDiccionario()
+		{
+			///
+			/// Cree el libro.
+			var libro = HefestoLceElements.CrearSiiLibroDiccionario();
+
+			libro.SiiDocumentoDiccionario(doc =>
+			{
+
+
+				doc.SiiIdentificacion(ident =>
+				{
+					ident.RutContribuyente = "99999999-9";
+					ident.PeriodoTributario = "2026";
+					ident.Rectificatoria = 1;
+				});
+
+				doc.RutFirma = "88888888-8";
+
+				///
+				/// Agregar las cuentas.
+				doc.SiiCuentas( GenerarCuentasDiccionario() );
+
+			});
+
+			///
+			/// Regrese el libro diccionario.
+			return libro;
+
+		}
+
+		///
+		/// Crea las cuentas del balance.
+		List<HefCuentaDiccionario> GenerarCuentasDiccionario()
+		{
+
+			List<HefCuentaDiccionario> cuentas = new();
+
+			var cuenta = new HefCuentaDiccionario();
+			cuenta.ClasificacionCuenta = ClasificacionCuenta.Activo;
+			cuenta.CodigoCuenta = "1102001";
+			cuenta.Glosa = "CAJA CHICA OFICINA SANTIAGO";
+			cuenta.CodigoSII = "1220.010";
+			cuentas.Add(cuenta);
+
+			cuenta = new HefCuentaDiccionario();
+			cuenta.ClasificacionCuenta = ClasificacionCuenta.Activo;
+			cuenta.CodigoCuenta = "1131003";
+			cuenta.Glosa = "CFONDOS POR RENDIR";
+			cuenta.CodigoSII = "1220.070";
+			cuentas.Add(cuenta);
+
+			return cuentas;
+		}
+
+	}
+
+}
+
+
+
+
+</code>
+</pre>
+<br/>
+<h2>Ejemplo de libro diccionario obligatorio generado</h2>
+<pre><code class="language-xml">
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+&lt;LceEnvioOblig version=&quot;1.0&quot; xmlns=&quot;http://www.sii.cl/SiiLce&quot;&quot;&gt;
+	&lt;DocumentoEnvioOblig ID=&quot;EnvioOblig_88888888-8_99999999-9&quot;&gt;
+		&lt;!--
+		Proyecto   : Hefesto Investigación y Desarrollo.
+		Desarrollo : Marcelo Rojas Rojas.
+		Propósito  : Generación de Libros Contables Electrónicos (LCE)
+		conforme a las especificaciones del Servicio de Impuestos Internos (SII).
+		Año        : 2026.
+		--&gt;
+		&lt;Caratula&gt;
+			&lt;RutEnvia&gt;88888888-8&lt;/RutEnvia&gt;
+			&lt;RutContribuyente&gt;99999999-9&lt;/RutContribuyente&gt;
+			&lt;TmstFirmaEnv&gt;2026-09-07T10:26:19&lt;/TmstFirmaEnv&gt;
+		&lt;/Caratula&gt;
+		&lt;LceCoCierre version=&quot;1.0&quot;&gt;
+			&lt;LceDiccionario version=&quot;1.0&quot; xmlns=&quot;http://www.sii.cl/SiiLce&quot; &quot;&gt;
+				&lt;DocumentoDiccionario ID=&quot;Diccionario_99999999-9_2026_1&quot;&gt;
+					&lt;Identificacion&gt;
+						&lt;RutContribuyente&gt;99999999-9&lt;/RutContribuyente&gt;
+						&lt;PeriodoTributario&gt;2026&lt;/PeriodoTributario&gt;
+						&lt;Rectificatoria&gt;1&lt;/Rectificatoria&gt;
+					&lt;/Identificacion&gt;
+					&lt;Cuenta&gt;
+						&lt;ClasificacionCuenta&gt;1&lt;/ClasificacionCuenta&gt;
+						&lt;CodigoCuenta&gt;1102001&lt;/CodigoCuenta&gt;
+						&lt;Glosa&gt;CAJA CHICA OFICINA SANTIAGO&lt;/Glosa&gt;
+						&lt;CodigoSII&gt;1220.010&lt;/CodigoSII&gt;
+					&lt;/Cuenta&gt;
+					&lt;Cuenta&gt;
+						&lt;ClasificacionCuenta&gt;1&lt;/ClasificacionCuenta&gt;
+						&lt;CodigoCuenta&gt;1131003&lt;/CodigoCuenta&gt;
+						&lt;Glosa&gt;CFONDOS POR RENDIR&lt;/Glosa&gt;
+						&lt;CodigoSII&gt;1220.070&lt;/CodigoSII&gt;
+					&lt;/Cuenta&gt;
+					&lt;RutFirma&gt;99999999-9&lt;/RutFirma&gt;
+					&lt;TmstFirma&gt;2026-09-07T10:26:19&lt;/TmstFirma&gt;
+				&lt;/DocumentoDiccionario&gt;
+				&lt;Signature xmlns=&quot;http://www.w3.org/2000/09/xmldsig#&quot;&gt;
+					&lt;SignedInfo&gt;
+						&lt;CanonicalizationMethod Algorithm=&quot;http://www.w3.org/TR/2001/REC-xml-c14n-20010315&quot;/&gt;
+						&lt;SignatureMethod Algorithm=&quot;http://www.w3.org/2000/09/xmldsig#rsa-sha1&quot;/&gt;
+						&lt;Reference URI=&quot;#Diccionario_99999999-9_2026_1&quot;&gt;
+							&lt;DigestMethod Algorithm=&quot;http://www.w3.org/2000/09/xmldsig#sha1&quot;/&gt;
+							&lt;DigestValue&gt;PQeL2gmzPu/HEN0J3r+7hWvgsYI=&lt;/DigestValue&gt;
+						&lt;/Reference&gt;
+					&lt;/SignedInfo&gt;
+					&lt;SignatureValue&gt;ifYzeqjWP1pHoNLYGWSvv0YhaZhYap+EXh9vcyCWn4hFqZUaSk0nS+mnBUS81jCv7kM4==&lt;/SignatureValue&gt;
+					&lt;KeyInfo&gt;
+						&lt;KeyValue&gt;
+							&lt;RSAKeyValue&gt;
+								&lt;Modulus&gt;oUb4H1kwlPwQgUyFi0SU879ZTIlRqwhLWnkXIMxufYeKcnFLy69kAfXanuZVuPS==&lt;/Modulus&gt;
+								&lt;Exponent&gt;AQAB&lt;/Exponent&gt;
+							&lt;/RSAKeyValue&gt;
+						&lt;/KeyValue&gt;
+						&lt;X509Data&gt;
+							&lt;X509Certificate&gt;MIIH2TCCBcGgAwIBAgIKYVwVfwABABBXvzANBgkqhkiG9w0BAQsFADCBvzEL&lt;/X509Certificate&gt;
+						&lt;/X509Data&gt;
+					&lt;/KeyInfo&gt;
+				&lt;/Signature&gt;
+			&lt;/LceDiccionario&gt;
+			&lt;LceCal xmlns=&quot;http://www.sii.cl/SiiLce&quot; &quot;&gt;
+				&lt;DocumentoCal ID=&quot;CAL_76360577-9_C_2_1_2026&quot;&gt;
+					&lt;RutDistribuidor&gt;76360577-9&lt;/RutDistribuidor&gt;
+					&lt;TipoCertificado&gt;C&lt;/TipoCertificado&gt;
+					&lt;Clase&gt;2&lt;/Clase&gt;
+					&lt;TipoLCE&gt;1&lt;/TipoLCE&gt;
+					&lt;FchEmision&gt;2026-08-27&lt;/FchEmision&gt;
+					&lt;PeriodoVigencia&gt;2026&lt;/PeriodoVigencia&gt;
+					&lt;TmstFirma&gt;2026-08-27T14:42:53&lt;/TmstFirma&gt;
+				&lt;/DocumentoCal&gt;
+				&lt;Signature xmlns=&quot;http://www.w3.org/2000/09/xmldsig#&quot;&gt;
+					&lt;SignedInfo&gt;
+						&lt;CanonicalizationMethod Algorithm=&quot;http://www.w3.org/TR/2001/REC-xml-c14n-20010315&quot;/&gt;
+						&lt;SignatureMethod Algorithm=&quot;http://www.w3.org/2000/09/xmldsig#rsa-sha1&quot;/&gt;
+						&lt;Reference URI=&quot;#CAL_76360577-9_C_2_1_2026&quot;&gt;
+							&lt;DigestMethod Algorithm=&quot;http://www.w3.org/2000/09/xmldsig#sha1&quot;/&gt;
+							&lt;DigestValue&gt;+qgmicA4IAbFln/dWbKEUePTBt0=&lt;/DigestValue&gt;
+						&lt;/Reference&gt;
+					&lt;/SignedInfo&gt;
+					&lt;SignatureValue&gt;
+iPuZc0GS+ApokcxiH3b2X1yGHh9oKxptvRaGNvaiguKOemaFcyqe4xGHtYqyIIM7R4P8Z51idG4C
+iUi9AepSiPVsDYaFf/AOqJrnHTHUZ7F8AtXS9xGK+BTFR3uFNzASDq1lKltJCIMF//xZ27DFqA4L
+mkUz39XvVFxh2jKhHIr3tyR2tr+RrJRjzFZmuzWwmuWqJ9kKW7Dhb+mWbeG0tT70Df5xwj33tSnB
+Gbxhm2Y/KA3AjbeY7uyjUok5B5IKPwKYaJJaInTd4qF6B3Kba/uKepChPnPrluAmrgcdyiv6Xj0f
+qNWHN61Nmvh1NCi66h0kW1mvawHhdjhh5sg4Fg==
+&lt;/SignatureValue&gt;
+					&lt;KeyInfo&gt;
+						&lt;KeyValue&gt;
+							&lt;RSAKeyValue&gt;
+								&lt;Modulus&gt;
+jIqoTvoX3JSoqUZ18B7j1ijZp3kI6hDwBMgklsGpD0EMpbgYVV78NR9lgnzQsSzRpH149DXJ18Pt
+94vF2KYKsoFRId7sgZAQO4BSyjp4JKBESIBJcsbGQDedGt947SKyeltNqw/rc4M6p5TuxnTh9TVv
+gYQug6qmLGy6iVyh3BqwX6uTEdickXRYKBEuZpm6RYWdGMrS2S664wzvL5j+Aec6ibQ99SgQon1n
+XSKI/ayyCoBuvigv1xSzo+/molj2pcpWRJlrUJSbl1SQyAvkna5Eo9XYygH62CjxuiHPTpeTd6am
+kQk4gnSWSu2UENKDjA8jN3uzlJr0sIyYK6tDMQ==
+&lt;/Modulus&gt;
+								&lt;Exponent&gt;AQAB&lt;/Exponent&gt;
+							&lt;/RSAKeyValue&gt;
+						&lt;/KeyValue&gt;
+						&lt;X509Data&gt;
+							&lt;X509Certificate&gt;
+MIIHWjCCBUKgAwIBAgIIG9kqIzWBq28wDQYJKoZIhvcNAQELBQAwgbcxCzAJBgNVBAYTAkNMMRQw
+EgYDVQQKDAtFLVNpZ24gUy5BLjE8MDoGA1UECwwzVGVybWlub3MgZGUgdXNvIGVuIHd3dy5lc2ln
+bi1sYS5jb20vYWN1ZXJkb3RlcmNlcm9zMTAwLgYDVQQDDCdFLVNpZ24gQ2xhc3MgMiBGaXJtYSBU
+cmlidXRhcmlhIENBIC0gRzIxIjAgBgkqhkiG9w0BCQEWE2Utc2lnbkBlc2lnbi1sYS5jb20wHhcN
+MjYwMjAyMTcyNTAwWhcNMjkwMjAxMTcyNTAwWjCBrTELMAkGA1UEBhMCQ0wxFDASBgNVBAoMC0==
+
+&lt;/X509Certificate&gt;
+						&lt;/X509Data&gt;
+					&lt;/KeyInfo&gt;
+				&lt;/Signature&gt;
+			&lt;/LceCal&gt;
+		&lt;/LceCoCierre&gt;
+	&lt;/DocumentoEnvioOblig&gt;
+	&lt;Signature xmlns=&quot;http://www.w3.org/2000/09/xmldsig#&quot;&gt;
+		&lt;SignedInfo&gt;
+			&lt;CanonicalizationMethod Algorithm=&quot;http://www.w3.org/TR/2001/REC-xml-c14n-20010315&quot;/&gt;
+			&lt;SignatureMethod Algorithm=&quot;http://www.w3.org/2000/09/xmldsig#rsa-sha1&quot;/&gt;
+			&lt;Reference URI=&quot;#EnvioOblig_88888888-8_99999999-9&quot;&gt;
+				&lt;DigestMethod Algorithm=&quot;http://www.w3.org/2000/09/xmldsig#sha1&quot;/&gt;
+				&lt;DigestValue&gt;TU1Vv9zeON9088mAjztYW8Jrjqo=&lt;/DigestValue&gt;
+			&lt;/Reference&gt;
+		&lt;/SignedInfo&gt;
+		&lt;SignatureValue&gt;fPRj9IvbG0kwD0Hf6H68B4OL35Wicp5h4zWTMDRMXvJXMPN2tIxJKbeNIFb6ZAz8LliMWG7MOugju8eGoGAuSKtTSU==&lt;/SignatureValue&gt;
+		&lt;KeyInfo&gt;
+			&lt;KeyValue&gt;
+				&lt;RSAKeyValue&gt;
+					&lt;Modulus&gt;oUb4H1kwlPwQgUyFi0SU879ZTIlRqwhLWnkXIMxufYeKcnFLy69kAfXanuZVuPSwc0Uy9mdjb8cRmmktT2nO0==&lt;/Modulus&gt;
+					&lt;Exponent&gt;AQAB&lt;/Exponent&gt;
+				&lt;/RSAKeyValue&gt;
+			&lt;/KeyValue&gt;
+			&lt;X509Data&gt;
+				&lt;X509Certificate&gt;MIIH2TCCBcGgAwIBAgIKYVwVfwABABBXvzANBgkqhkiG9w0BAQsFADCBvzELMAkGA1UEBhMCQ0wxHTAbB&lt;/X509Certificate&gt;
+			&lt;/X509Data&gt;
+		&lt;/KeyInfo&gt;
+	&lt;/Signature&gt;
+&lt;/LceEnvioOblig&gt;
+</code></pre>
+
+
+      
+        
+    </main>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>
+            © 2026 Hefesto
+        </p>
+    </footer>
+
+    <script src="js/site.js"></script>
+
+
+<script>
+    hljs.configure({ languages: ['csharp'] }); hljs.highlightAll();
+</script>
+
+
+
+</body>
+
+</html>

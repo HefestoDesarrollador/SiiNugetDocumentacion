@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description" content="Ejemplo de la biblioteca Hefesto LCE">
+
+    <title>Hefesto | Documentación</title>
+
+    <link rel="stylesheet" href="../css/site.css">
+
+
+<link rel="stylesheet"
+      href="https:///cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/github-dark.min.css">
+
+<script src="https:///cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+
+<script src="https:///cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/csharp.min.js"></script>
+
+<script src="https:///cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/languages/xml.min.js"></script>
+
+
+
+
+</head>
+
+<body>
+
+    <!-- Encabezado -->
+    <header>
+        <nav>
+           <div class="brand">
+
+            <a href="../index.html">
+            <img
+            src="../Images/icon.png"
+            alt="Logo Hefesto"
+            class="logo-hefesto" style="width: 60px; height: 60px; margin-right: 10px;"></a>
+
+            <div class="logo">
+                Hefesto Investigación y Desarrollo.
+            </div>
+
+            </div>
+
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#instalacion">Instalación</a></li>
+                <li><a href="#uso">Uso</a></li>
+                <li><a href="#api">API</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Contenido principal -->
+    <main>
+
+        <!-- Inicio -->
+        <section id="inicio">
+            <h1>Hefesto LCE (Publicación libros)</h1>
+
+            <p>
+Proceso encargado de enviar un Libro Contable Electrónico (LCE) al Servicio de Impuestos Internos (SII). Hefesto utiliza el archivo XML generado, configura el ambiente de publicación y los datos de autenticación, y realiza el envío directamente al SII.
+
+Una vez procesada la solicitud, el sistema informa el resultado de la operación y, cuando la publicación es exitosa, obtiene el **Track ID** entregado por el SII, permitiendo identificar y realizar el seguimiento del envío.
+
+            </p>
+        </section>
+<br/>
+<h2>Ejemplo de publicación de libros en el SII.</h2>
+<pre>
+<code class="language-csharp">
+
+/// &lt;summary&gt;
+/// Bibliotecas necsarias.
+/// &lt;/summary&gt;
+using Hefesto.SII.Lce.Enumeradores;
+using Hefesto.SII.Lce.Extruturas.Balance;
+using Hefesto.SII.Lce.Extruturas.Diario;
+using Hefesto.SII.Lce.Extruturas.Diccionario;
+using Hefesto.SII.Lce.Extruturas.Mayor;
+using Hefesto.SII.Lce.Instancias;
+using System.Text;
+using System.Xml.Linq;            
+
+internal class Program
+{
+
+    ///
+    /// Punto de entrada del programa.
+    static async Task Main(string[] args)
+    {
+        ///
+        /// Publicación de libros en el SII.
+        await PublicarEnvioLibroSII();
+
+        ///
+        /// Mantener la consola abierta.
+        Console.readLine();
+
+    }
+
+     /// <summary>
+    /// Publica ene l SII un libro generado.
+    /// </summary>
+    public static async Task PublicarEnvioLibroSII()
+    {
+
+        ///
+        /// fullpath del Libro a publicar.
+        var libro = "EnvioLibroDiario.xml";
+
+        ///
+        /// Cree el publicador 
+        var publicador = HefestoLceElements.CrearSiiLcePublicador()
+        
+            .SiiConfiguracion( cfg => {
+
+                ///
+                /// Datos para la autenticación con el sii.
+                cfg.SiiAutenticacion(auth =>
+                {
+                    auth.Ambiente = SiiAmbiente.CERTIFICACION;
+                    auth.Basse64 = "MIIPNgIBAzCCDvIGCSqGSIb3DQEHAaCCDuMEgg7fMIIO2zCCBgwGCSqGSIb3DQE==";
+                    auth.Password = "1234";
+                });
+
+            });
+
+        ///
+        /// Publicar el libro.
+        var respPub = 
+            await 
+                publicador.
+                    Libro(libro).
+                        SIIPublicarLibro();
+
+
+        ///
+        /// Resultado en consola.
+        Console.WriteLine($"EsCorrceto : {respPub.Success}");
+        Console.WriteLine($"Mensaje    : {respPub.Message}");
+
+
+        ///
+        /// Si la publicación fue exitosa, mostrar el contenido de la respuesta.
+        /// respPub.Data contiene el contenido de la respuesta del SII trackid.
+        if (respPub.Success)
+            Console.WriteLine($"Data: {respPub.Data}");
+
+    }
+}    
+</code>
+</pre>
+        
+    </main>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>
+            © 2026 Hefesto
+        </p>
+    </footer>
+
+    <script src="js/site.js"></script>
+
+
+<script>
+    hljs.configure({ languages: ['csharp'] }); hljs.highlightAll();
+</script>
+
+
+
+</body>
+
+</html>
