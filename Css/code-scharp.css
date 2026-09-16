@@ -1,0 +1,51 @@
+.code-csharp {
+    background-color: #f2f2f2;
+    color: #2d3748;
+    border: 1px solid #d1d5db;
+    border-radius: var(--border-radius);
+    padding: var(--spacing-medium);
+    overflow-x: auto;
+    margin: var(--spacing-medium) 0;
+}
+
+.code-csharp pre {
+    margin: 0;
+    background: transparent !important;
+}
+
+.code-csharp code {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 14px;
+	line-height: 1.2;
+    background: transparent !important;
+	color: #000000 !important;
+	font-weight : bold;
+}
+
+
+.code-csharp code .hljs-comment,
+.code-csharp code .hljs-doctag,
+.code-csharp code .hljs-meta {
+    color: #15803d !important;
+    font-weight : bold;
+}
+.code-csharp code .hljs-type{
+	   color: #000000 !important;
+	
+	
+}
+.code-csharp code .hljs-keyword {
+    color: #000000 !important;
+}
+
+.code-csharp code .hljs-string {
+    color: #808080 !important;
+}
+
+.code-csharp code .hljs-title.function_ {
+    color: #000000 !important;
+}
+
+.code-csharp code span {
+    color: #969696 !important;
+}

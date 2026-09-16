@@ -11,6 +11,8 @@
     <title>Hefesto | Documentación</title>
 
     <link rel="stylesheet" href="../Css/Site.css">
+    <link rel="stylesheet" href="../Css/code-scharp.css">
+
 
 
 <link rel="stylesheet"
@@ -95,26 +97,19 @@ Una vez procesada la solicitud, el sistema informa el resultado de la operación
         </section>
 <br/>
 <h1>Ejemplo de publicación de libros en el SII.</h1>
+<div class="code-csharp">
 <pre>
-<code class="language-csharp">
-
-/// &lt;summary&gt;
-/// Bibliotecas necsarias.
-/// &lt;/summary&gt;
+<code class="language-csharp">///
+/// Bibliotecas necesarias.
 using Hefesto.SII.Lce.Enumeradores;
-using Hefesto.SII.Lce.Extruturas.Balance;
-using Hefesto.SII.Lce.Extruturas.Diario;
-using Hefesto.SII.Lce.Extruturas.Diccionario;
-using Hefesto.SII.Lce.Extruturas.Mayor;
 using Hefesto.SII.Lce.Instancias;
 using System.Text;
-using System.Xml.Linq;            
+using System.Xml.Linq; 
 
 internal class Program
 {
-
-    ///
-    /// Punto de entrada del programa.
+    ////
+    //// Punto de entrada del programa.
     static async Task Main(string[] args)
     {
         ///
@@ -125,11 +120,10 @@ internal class Program
         /// Mantener la consola abierta.
         Console.readLine();
 
-    }
+    }   
 
-     /// <summary>
-    /// Publica ene l SII un libro generado.
-    /// </summary>
+    ////
+    //// Publica en el SII un libro generado.
     public static async Task PublicarEnvioLibroSII()
     {
 
@@ -147,9 +141,19 @@ internal class Program
                 /// Datos para la autenticación con el sii.
                 cfg.SiiAutenticacion(auth =>
                 {
+
+                    ////
+                    //// Ambiente de certificación o producción.
                     auth.Ambiente = SiiAmbiente.CERTIFICACION;
+
+                    ////
+                    //// Certificado pfx en formato base64 y contraseña del certificado.
                     auth.Basse64 = "MIIPNgIBAzCCDvIGCSqGSIb3DQEHAaCCDuMEgg7fMIIO2zCCBgwGCSqGSIb3DQE==";
+
+                    ////
+                    //// Contraseña del certificado.
                     auth.Password = "1234";
+
                 });
 
             });
@@ -162,12 +166,10 @@ internal class Program
                     Libro(libro).
                         SIIPublicarLibro();
 
-
         ///
         /// Resultado en consola.
-        Console.WriteLine($"EsCorrceto : {respPub.Success}");
+        Console.WriteLine($"EsCorrecto : {respPub.Success}");
         Console.WriteLine($"Mensaje    : {respPub.Message}");
-
 
         ///
         /// Si la publicación fue exitosa, mostrar el contenido de la respuesta.
@@ -175,10 +177,13 @@ internal class Program
         if (respPub.Success)
             Console.WriteLine($"Data: {respPub.Data}");
 
-    }
-}    
+    }    
+
+}
+
 </code>
 </pre>
+</div>
         
     </main>
 

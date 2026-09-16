@@ -183,25 +183,8 @@ p {
 
 /* ---------- Bloques de código ---------- */
 
-pre {
-    background-color: #1e293b;
-	color: #e2e8f0;
 
-    padding: var(--spacing-medium);
-    border-radius: var(--border-radius);
 
-    overflow-x: auto;
-    margin: var(--spacing-medium) 0;
-}
-
-code {
-    font-family:
-        Consolas,
-        "Courier New",
-        monospace;
-    font-size: 12px;   
-
-}
 
 
 /* ---------- Artículos ---------- */
