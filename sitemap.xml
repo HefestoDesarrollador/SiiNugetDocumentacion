@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    <url>
+        <loc>https://hefestodesarrollador.github.io/SiiNugetDocumentacion/indice.html</loc>
+    </url>
+
+    <url>
+        <loc>https://hefestodesarrollador.github.io/SiiNugetDocumentacion/Lce/HefLce.html</loc>
+    </url>
+
+    <url>
+        <loc>https://hefestodesarrollador.github.io/SiiNugetDocumentacion/Lce/HefLceBalanceObligatorio.html</loc>
+    </url>
+	
+	 <url>
+        <loc>https://hefestodesarrollador.github.io/SiiNugetDocumentacion/Lce/HefLceDiccionarioObligatorio.html</loc>
+    </url>
+	
+	<url>
+        <loc>https://hefestodesarrollador.github.io/SiiNugetDocumentacion/Lce/HefLceDiarioObligatorio.html</loc>
+    </url>
+
+	<url>
+        <loc>https://hefestodesarrollador.github.io/SiiNugetDocumentacion/Lce/HefLceMayorObligatorio.html</loc>
+    </url>
+
+	<url>
+        <loc>https://hefestodesarrollador.github.io/SiiNugetDocumentacion/Lce/HefLcePublicacion.html</loc>
+    </url>
+
+	<url>
+        <loc>https://hefestodesarrollador.github.io/SiiNugetDocumentacion/Lce/HefLceConsultas.html</loc>
+    </url>
+
+
+
+
+</urlset>
