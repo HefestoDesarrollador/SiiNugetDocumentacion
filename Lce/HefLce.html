@@ -22,36 +22,53 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Asap+Condensed:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Barlow+Semi+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=DM+Serif+Text:ital@0;1&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
 	
+	<!-- Icono -->
+	<link rel="icon" type="image/png" href="../Images/icon.png">
+	
+	<!-- barbatruco -->
+	<script src="../Js/rutas.js"></script>
+	
+	
+	
 </head>
 
 <body>
 
     <!-- Encabezado -->
     <header>
+
         <nav>
 		
-		<div class="brand">
-                <a href="/index.html">
-                    <img src="../Images/icon.png" alt="Logo Hefesto" class="logo-hefesto" style="width: 60px; height: 60px; margin-right: 10px;"/>
-                </a>
+			<!-- identificación del sitio web -->
+			<div class="brand">
+
+				<a id="brand-inicio" href="index.html">
+					<img id="brand-icono" src="Images/icon.png" alt="Logo Hefesto" class="logo-hefesto" style="width: 60px; height: 60px; margin-right: 10px;"/>
+				</a>
+
 				<div class="logo">
 					<h1>Hefesto Investigación y Desarrollo.</h1>
 				</div>
-            </div>
-            <ul>
-                <li>
-                    <a href="/index.html">Volver Inicio</a>
-                </li>
-                <!-- <li> -->
-                    <!-- <a href="HefQuienesSomos.html">Quiénes somos</a> -->
-                <!-- </li> -->
-                <!-- <li> -->
-                    <!-- <a href="HefContacto.html">Contacto</a> -->
-                <!-- </li> -->
-				
-            </ul>
-		    
-        </nav>
+								
+			</div>
+			
+			<ul>
+				<li>
+					<a id="inicio" href="#">Inicio</a>
+				</li>
+				<li>
+					<a id="quienesSomos" href="#">Quiénes somos</a>
+				</li>
+				<li>
+					<a id="contacto" href="#">Contacto</a>
+				</li>
+				<li>
+					<a href="#" id="contador-visitas">Visitas: cargando...</a>
+				</li>
+			</ul>
+		
+		</nav>
+		
     </header>
 
     <!-- Contenido principal -->
@@ -268,9 +285,7 @@
                 </table>
 
             </div>
-
-
-            
+         
 
 
 
@@ -295,3 +310,32 @@
 </body>
 
 </html>
+
+
+<script>
+
+////
+//// Rutas necesarias.
+const urlInicio = getUrl("index.html");
+const urlContacto = getUrl("HefContacto.html");
+const urlQuienesSomos = getUrl("HefQuienesSomos.html");
+
+////
+//// Asignar valores del Brand.
+document.getElementById("brand-inicio").href = getUrl("index.html");
+document.getElementById("brand-icono").src = getUrl("Images/icon.png");
+
+////
+//// Asignar valores a los links.
+document.getElementById("inicio").href = getUrl("index.html");
+document.getElementById("contacto").href = getUrl("HefContacto.html");
+document.getElementById("quienesSomos").href = getUrl("HefQuienesSomos.html");
+
+
+console.log(window.location.origin);
+console.log(urlInicio);
+console.log(urlContacto);
+console.log(urlQuienesSomos);
+
+
+</script>
