@@ -62,18 +62,19 @@
             </div>
             <ul>
                 <li>
-                    <a href="index.html">Inicio</a>
+                    <a id="inicio" href="#">Inicio</a>
                 </li>
                 <li>
-                    <a href="HefQuienesSomos.html">Quiénes somos</a>
+                    <a id="quienesSomos" href="#">Quiénes somos</a>
                 </li>
                 <li>
-                    <a href="HefContacto.html">Contacto</a>
+                    <a id="contacto" href="#">Contacto</a>
                 </li>
 				<li>
                     <a href="#" id="contador-visitas">Visitas: cargando...</a>
                 </li>
             </ul>
+
 		    
         </nav>
     </header>
@@ -177,6 +178,15 @@ console.log(window.location.origin);
 console.log(urlInicio);
 console.log(urlContacto);
 console.log(urlQuienesSomos);
+
+////
+//// Asignar valores a los links.
+document.getElementById("inicio").href = getUrl("index.html");
+document.getElementById("contacto").href = getUrl("HefContacto.html");
+document.getElementById("quienesSomos").href = getUrl("HefQuienesSomos.html");
+
+
+
 
 
 </script>
