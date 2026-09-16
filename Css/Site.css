@@ -149,9 +149,9 @@ h1{
     font-weight: 700;
     letter-spacing: 0px;
 	
-},
+}
 
-h2,
+
 h3 {
     color: var(--color-primary-dark);
     line-height: 1.2;
@@ -185,7 +185,7 @@ p {
 
 pre {
     background-color: #1e293b;
-    color: #e2e8f0;
+	color: #e2e8f0;
 
     padding: var(--spacing-medium);
     border-radius: var(--border-radius);
@@ -199,7 +199,8 @@ code {
         Consolas,
         "Courier New",
         monospace;
-    font-size: 12px;    
+    font-size: 12px;   
+
 }
 
 
@@ -220,12 +221,14 @@ article {
 footer {
     background-color: var(--color-primary-dark);
     color: white;
-
     text-align: center;
-
     padding: var(--spacing-large);
 }
 
+footer p {
+    text-align: center;
+    margin-bottom: 0;
+}
 
 /* ---------- Responsive ---------- */
 
@@ -253,10 +256,6 @@ footer {
     h2 {
         font-size: 1.6rem;
     }
-
- 
-
-
 
 }
 
