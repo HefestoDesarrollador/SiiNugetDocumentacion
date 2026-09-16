@@ -1,3 +1,11 @@
-document.querySelectorAll('a[href^="/@/"]').forEach(link => {
-    link.href = getBaseUrl() + link.getAttribute("href").substring(3);
-});
+function getUrl(archivo) {
+    const origin = window.location.origin;
+
+    if (window.location.hostname.includes("github.io")) {
+        return origin + "/SiiNugetDocumentacion/" + archivo;
+    }
+
+    return origin + "/" + archivo;
+}
+
+
