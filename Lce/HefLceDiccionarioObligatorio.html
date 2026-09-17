@@ -11,6 +11,8 @@
     <title>Hefesto | Documentación</title>
 
     <link rel="stylesheet" href="../Css/Site.css">
+	<link rel="stylesheet" href="../Css/code-scharp.css">
+	<link rel="stylesheet" href="../Css/code-xml.css">
 
 
 <link rel="stylesheet"
@@ -93,6 +95,7 @@ En Hefesto SII LCE, el Diccionario se construye mediante estructuras que facilit
         </section>
 <br/>
 <h1>Ejemplo de generación libro diccionario obligatorio.</h1>
+<div class="code-csharp">
 <pre>
 <code class="language-csharp">
 
@@ -100,10 +103,7 @@ En Hefesto SII LCE, el Diccionario se construye mediante estructuras que facilit
 /// Bibliotecas necsarias.
 /// &lt;/summary&gt;
 using Hefesto.SII.Lce.Enumeradores;
-using Hefesto.SII.Lce.Extruturas.Balance;
-using Hefesto.SII.Lce.Extruturas.Diario;
 using Hefesto.SII.Lce.Extruturas.Diccionario;
-using Hefesto.SII.Lce.Extruturas.Mayor;
 using Hefesto.SII.Lce.Instancias;
 using System.Text;
 using System.Xml.Linq;            
@@ -253,8 +253,12 @@ internal class Program
 
 </code>
 </pre>
+</div>
+
+
 <br/>
 <h1>Ejemplo de libro diccionario obligatorio generado</h1>
+<div class="code-xml">
 <pre><code class="language-xml">
 &lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
 &lt;LceEnvioOblig version=&quot;1.0&quot; xmlns=&quot;http://www.sii.cl/SiiLce&quot;&quot;&gt;
@@ -394,7 +398,7 @@ MjYwMjAyMTcyNTAwWhcNMjkwMjAxMTcyNTAwWjCBrTELMAkGA1UEBhMCQ0wxFDASBgNVBAoMC0==
 		&lt;/KeyInfo&gt;
 	&lt;/Signature&gt;
 &lt;/LceEnvioOblig&gt;
-</code></pre>
+</code></pre></div>
 
 
       
