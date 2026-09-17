@@ -1,0 +1,88 @@
+/* =========================================
+   CONTACTO
+   ========================================= */
+
+.contact-section {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+}
+
+.contact-section h1 {
+    margin-bottom: 18px;
+}
+
+.contact-intro {
+    max-width: 850px;
+    margin-bottom: 30px;
+    line-height: 1.7;
+}
+
+.contact-card {
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.contact-row {
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    align-items: center;
+    min-height: 58px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.contact-row:last-child {
+    border-bottom: none;
+}
+
+.contact-label {
+    padding: 16px 20px;
+    background: rgba(74, 85, 104, 0.08);
+    color: var(--color-primary-dark);
+    font-weight: 600;
+}
+
+.contact-value {
+    padding: 16px 22px;
+    color: var(--color-text);
+}
+
+.contact-value a {
+    color: var(--color-primary-dark);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.contact-value a:hover {
+    color: var(--color-secondary);
+    text-decoration: underline;
+}
+
+.contact-whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+}
+
+.contact-arrow {
+    font-size: 18px;
+    transition: transform 0.2s ease;
+}
+
+.contact-whatsapp:hover .contact-arrow {
+    transform: translateX(4px);
+}
+
+.contact-note {
+    margin-top: 22px;
+    padding: 14px 18px;
+    border-left: 3px solid var(--color-primary);
+    background: rgba(255, 255, 255, 0.35);
+    color: var(--color-text-light);
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
