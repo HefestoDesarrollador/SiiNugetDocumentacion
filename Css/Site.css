@@ -242,79 +242,102 @@ footer p {
 
 }
 
+
 /* ---------- Tabla de herramientas ---------- */
 
-    .table-container {
-        width: 100%;
-        overflow-x: auto;
-        margin-top: var(--spacing-large);
-    }
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: var(--spacing-large);
+}
 
-    .tools-table {
-        width: 100%;
-        border-collapse: collapse;
-        background-color: var(--color-surface);
-        border: 1px solid var(--color-border);
-        border-radius: var(--border-radius);
-        overflow: hidden;
-    }
+.tools-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
 
-    .tools-table th {
-        background-color: #d1d5db;
-        color: #374151;
+.tools-table th {
+    background-color: #d1d5db;
+    color: #374151;
 
-        text-align: left;
-        font-weight: 600;
+    text-align: left;
+    font-weight: 600;
 
-        padding: 5px 20px 5px 15px;
-        border-bottom: 0px solid #9ca3af;
-    }
+    padding: 5px 20px 5px 15px;
+    border-bottom: 0px solid #9ca3af;
+}
 
-    .tools-table td {
-        padding: 5px 20px 5px 15px;
+.tools-table td {
+    padding: 5px 20px 5px 15px;
 
-        border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
 
-        color: var(--color-text);
-        vertical-align: top;
-    }
+    color: var(--color-text);
+    vertical-align: top;
 
-    /* Filas alternadas */
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
 
-    .tools-table tbody tr:nth-child(even) {
-        background-color: #f3f4f6;
-    }
+/* Filas alternadas */
 
-    .tools-table tbody tr:nth-child(odd) {
-        background-color: #fafafa;
-    }
+.tools-table tbody tr:nth-child(even) {
+    background-color: #f3f4f6;
+}
 
-    /* Efecto al pasar el mouse */
+.tools-table tbody tr:nth-child(odd) {
+    background-color: #fafafa;
+}
 
-    .tools-table tbody tr:hover {
-        background-color: #e5e7eb;
-        cursor: pointer;
-    }
+/* Efecto al pasar el mouse */
 
-    /* Nombre del producto */
+.tools-table tbody tr:hover {
+    background-color: #e5e7eb;
+    cursor: pointer;
+}
 
-    .tools-table td:first-child {
-        width: 30%;
-        font-weight: 600;
-        white-space: nowrap;
-    }
+/* Primera columna */
 
-    .tools-table td:first-child a {
-        color: #374151;
-    }
+.tools-table td:first-child {
+    font-weight: normal;
+}
 
-    .tools-table td:first-child a:hover {
-        color: #111827;
-        text-decoration: underline;
-    }
+/* Nombre del producto */
 
-    /* Última fila */
+.tools-table td:last-child {
+    font-weight: normal;
+}
 
-    .tools-table tbody tr:last-child td {
-        border-bottom: none;
-    }
+/* Enlaces */
+
+.tools-table td a {
+    color: #374151;
+}
+
+.tools-table td a:hover {
+    color: #111827;
+    text-decoration: underline;
+}
+
+/* Última fila */
+
+.tools-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+	
+	#titulo-detalle
+	{
+		margin-bottom: 12px !important;
+		background: transparent;
+		font-weight:bold;
+		
+		
+	}
