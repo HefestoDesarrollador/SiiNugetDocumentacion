@@ -1,0 +1,35 @@
+.maintenance-alert {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 16px 20px;
+    margin: 20px auto;
+    max-width: var(--max-width);
+    background: #fff3cd;
+    border: 1px solid #ffe69c;
+    border-left: 5px solid #e0a800;
+    border-radius: var(--border-radius);
+    color: #664d03;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.maintenance-icon {
+    font-size: 26px;
+    flex-shrink: 0;
+}
+
+.maintenance-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.maintenance-content strong {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.maintenance-content span {
+    font-size: 14px;
+    color: #664d03;
+}
